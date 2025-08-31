@@ -1,484 +1,720 @@
+// prisma/seed.js
+// Seed completo com 30 livros e TODOS os campos preenchidos de acordo com o model abaixo:
+// model Book {
+//   id            Int      @id @default(autoincrement()) // não precisa informar
+//   title         String
+//   subtitle      String?
+//   authors       Json
+//   publisher     String?
+//   publishedDate DateTime?
+//   isbn          String   @unique
+//   language      String?
+//   pageCount     Int?
+//   coverImage    String
+//   genres        Json?
+//   description   String
+//   averageRating Float?
+//   ratingsCount  Int?
+//   synopsis      String?
+//   authorBio     String?
+//   createdAt     DateTime @default(now()) // não precisa informar
+//   updatedAt     DateTime @updatedAt      // não precisa informar
+// }
+
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+const books = [
+  {
+    title: "O Senhor dos Anéis: A Sociedade do Anel",
+    subtitle: "A Saga do Anel – Volume 1",
+    authors: ["J.R.R. Tolkien"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1954-07-29"),
+    isbn: "9780000000001",
+    language: "pt-BR",
+    pageCount: 423,
+    coverImage: "https://example.com/covers/lotr-fellowship.jpg",
+    genres: ["Fantasia", "Aventura", "Épico"],
+    description: "Frodo e seus companheiros partem para destruir o Um Anel e evitar o domínio de Sauron na Terra-média.",
+    averageRating: 4.9,
+    ratingsCount: 1580000,
+    synopsis: "A formação da Sociedade e o início da jornada de Frodo rumo a Mordor.",
+    authorBio: "J.R.R. Tolkien (1892–1973) foi filólogo e professor em Oxford, considerado o pai da fantasia moderna."
+  },
+  {
+    title: "O Hobbit",
+    subtitle: "Uma Aventura Inesperada",
+    authors: ["J.R.R. Tolkien"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1937-09-21"),
+    isbn: "9780000000002",
+    language: "pt-BR",
+    pageCount: 310,
+    coverImage: "https://example.com/covers/hobbit.jpg",
+    genres: ["Fantasia", "Aventura"],
+    description: "Bilbo Bolseiro é arrastado para uma jornada com anões para recuperar um tesouro guardado por um dragão.",
+    averageRating: 4.8,
+    ratingsCount: 1200000,
+    synopsis: "O encontro com Gandalf, os anões e a descoberta do Anel.",
+    authorBio: "J.R.R. Tolkien (1892–1973) deixou um legado monumental com O Hobbit e O Senhor dos Anéis."
+  },
+  {
+    title: "As Crônicas de Nárnia: O Leão, a Feiticeira e o Guarda-Roupa",
+    subtitle: "As Crônicas de Nárnia – Livro 2",
+    authors: ["C.S. Lewis"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1950-10-16"),
+    isbn: "9780000000003",
+    language: "pt-BR",
+    pageCount: 208,
+    coverImage: "https://example.com/covers/narnia-lww.jpg",
+    genres: ["Fantasia", "Infantojuvenil"],
+    description: "Quatro irmãos entram em um mundo mágico governado por uma feiticeira e liderado pelo leão Aslam.",
+    averageRating: 4.7,
+    ratingsCount: 950000,
+    synopsis: "O guarda-roupa como portal e a coroação dos reis e rainhas de Nárnia.",
+    authorBio: "C.S. Lewis (1898–1963) foi professor em Oxford e Cambridge e autor de obras cristãs e de fantasia."
+  },
+  {
+    title: "Harry Potter e a Pedra Filosofal",
+    subtitle: "Harry Potter – Ano 1",
+    authors: ["J.K. Rowling"],
+    publisher: "Rocco",
+    publishedDate: new Date("1997-06-26"),
+    isbn: "9780000000004",
+    language: "pt-BR",
+    pageCount: 223,
+    coverImage: "https://example.com/covers/hp1.jpg",
+    genres: ["Fantasia", "Juvenil"],
+    description: "Harry descobre ser um bruxo e inicia seus estudos em Hogwarts, onde enfrenta o retorno de Voldemort.",
+    averageRating: 4.8,
+    ratingsCount: 2800000,
+    synopsis: "A seleção das casas, o trio de amigos e o mistério da Pedra Filosofal.",
+    authorBio: "J.K. Rowling (1965–) é a autora da série Harry Potter, fenômeno global literário e cinematográfico."
+  },
+  {
+    title: "A Guerra dos Tronos",
+    subtitle: "As Crônicas de Gelo e Fogo – Livro 1",
+    authors: ["George R.R. Martin"],
+    publisher: "Leya",
+    publishedDate: new Date("1996-08-06"),
+    isbn: "9780000000005",
+    language: "pt-BR",
+    pageCount: 694,
+    coverImage: "https://example.com/covers/got1.jpg",
+    genres: ["Fantasia", "Política", "Épico"],
+    description: "Casas nobres disputam o Trono de Ferro enquanto uma ameaça antiga ressurge ao norte do Muro.",
+    averageRating: 4.7,
+    ratingsCount: 1800000,
+    synopsis: "Intrigas em Porto Real e a jornada de Jon Snow e Daenerys.",
+    authorBio: "George R.R. Martin (1948–) é roteirista e autor, conhecido pela complexidade política de suas narrativas."
+  },
+  {
+    title: "O Nome do Vento",
+    subtitle: "A Crônica do Matador do Rei – Dia 1",
+    authors: ["Patrick Rothfuss"],
+    publisher: "Arqueiro",
+    publishedDate: new Date("2007-03-27"),
+    isbn: "9780000000006",
+    language: "pt-BR",
+    pageCount: 662,
+    coverImage: "https://example.com/covers/o-nome-do-vento.jpg",
+    genres: ["Fantasia", "Épico"],
+    description: "Kvothe narra sua vida extraordinária, da infância trágica aos estudos na Universidade.",
+    averageRating: 4.7,
+    ratingsCount: 1200000,
+    synopsis: "Música, magia (simpatia) e o mistério dos Chandrian.",
+    authorBio: "Patrick Rothfuss (1973–) é escritor americano e professor, conhecido por sua prosa lírica em fantasia."
+  },
+  {
+    title: "1984",
+    subtitle: "Um Romance Distópico",
+    authors: ["George Orwell"],
+    publisher: "Companhia das Letras",
+    publishedDate: new Date("1949-06-08"),
+    isbn: "9780000000007",
+    language: "pt-BR",
+    pageCount: 328,
+    coverImage: "https://example.com/covers/1984.jpg",
+    genres: ["Distopia", "Política"],
+    description: "Em um regime totalitário, Winston Smith desafia o controle do Grande Irmão e busca a verdade.",
+    averageRating: 4.6,
+    ratingsCount: 3100000,
+    synopsis: "O Ministério da Verdade, a novilíngua e a vigilância onipresente.",
+    authorBio: "George Orwell (1903–1950) foi jornalista e romancista britânico, crítico de autoritarismos."
+  },
+  {
+    title: "Admirável Mundo Novo",
+    subtitle: "Uma Utopia de Controle",
+    authors: ["Aldous Huxley"],
+    publisher: "Biblioteca Azul",
+    publishedDate: new Date("1932-01-01"),
+    isbn: "9780000000008",
+    language: "pt-BR",
+    pageCount: 288,
+    coverImage: "https://example.com/covers/brave-new-world.jpg",
+    genres: ["Distopia", "Ficção Científica"],
+    description: "Em uma sociedade condicionada desde o nascimento, a estabilidade é mantida à custa da liberdade.",
+    averageRating: 4.4,
+    ratingsCount: 1500000,
+    synopsis: "Castas, soma e engenharia social como pilares do sistema.",
+    authorBio: "Aldous Huxley (1894–1963) foi escritor e ensaísta inglês, interessado em ciência e filosofia."
+  },
+  {
+    title: "Duna",
+    subtitle: "Crônicas de Duna – Livro 1",
+    authors: ["Frank Herbert"],
+    publisher: "Editora Aleph",
+    publishedDate: new Date("1965-08-01"),
+    isbn: "9780000000009",
+    language: "pt-BR",
+    pageCount: 688,
+    coverImage: "https://example.com/covers/dune.jpg",
+    genres: ["Ficção Científica", "Política", "Aventura"],
+    description: "Paul Atreides enfrenta intrigas interestelares no planeta desértico Arrakis, fonte da especiaria.",
+    averageRating: 4.6,
+    ratingsCount: 900000,
+    synopsis: "Messianismo, ecologia e disputas de poder em um império galáctico.",
+    authorBio: "Frank Herbert (1920–1986) foi jornalista e autor de ficção científica, célebre por Duna."
+  },
+  {
+    title: "Fundação",
+    subtitle: "A Trilogia Fundação – Livro 1",
+    authors: ["Isaac Asimov"],
+    publisher: "Editora Aleph",
+    publishedDate: new Date("1951-06-01"),
+    isbn: "9780000000010",
+    language: "pt-BR",
+    pageCount: 256,
+    coverImage: "https://example.com/covers/foundation.jpg",
+    genres: ["Ficção Científica", "Space Opera"],
+    description: "Hari Seldon cria a psico-história para reduzir a idade das trevas após a queda do Império Galáctico.",
+    averageRating: 4.3,
+    ratingsCount: 800000,
+    synopsis: "Planos de longo prazo para salvar o conhecimento humano.",
+    authorBio: "Isaac Asimov (1920–1992) publicou centenas de obras e popularizou as Três Leis da Robótica."
+  },
+  {
+    title: "Neuromancer",
+    subtitle: "Trilogia Sprawl – Livro 1",
+    authors: ["William Gibson"],
+    publisher: "Editora Aleph",
+    publishedDate: new Date("1984-07-01"),
+    isbn: "9780000000011",
+    language: "pt-BR",
+    pageCount: 320,
+    coverImage: "https://example.com/covers/neuromancer.jpg",
+    genres: ["Ficção Científica", "Cyberpunk"],
+    description: "Um hacker decadente é recrutado para um assalto no ciberespaço, redefinindo o gênero cyberpunk.",
+    averageRating: 4.1,
+    ratingsCount: 420000,
+    synopsis: "IA, megacorporações e ruas neon em alta tecnologia e baixa qualidade de vida.",
+    authorBio: "William Gibson (1948–) cunhou o termo ciberespaço e influenciou a cultura digital."
+  },
+  {
+    title: "Frankenstein",
+    subtitle: "O Moderno Prometeu",
+    authors: ["Mary Shelley"],
+    publisher: "Penguin",
+    publishedDate: new Date("1818-01-01"),
+    isbn: "9780000000012",
+    language: "pt-BR",
+    pageCount: 280,
+    coverImage: "https://example.com/covers/frankenstein.jpg",
+    genres: ["Terror", "Clássico", "Ficção Científica"],
+    description: "Victor Frankenstein cria vida e enfrenta as consequências éticas e pessoais de sua ambição.",
+    averageRating: 4.3,
+    ratingsCount: 1100000,
+    synopsis: "A criatura busca aceitação e justiça em um mundo hostil.",
+    authorBio: "Mary Shelley (1797–1851) escreveu Frankenstein aos 18 anos, inovando a ficção científica."
+  },
+  {
+    title: "Drácula",
+    subtitle: "O Conde das Sombras",
+    authors: ["Bram Stoker"],
+    publisher: "Penguin",
+    publishedDate: new Date("1897-05-26"),
+    isbn: "9780000000013",
+    language: "pt-BR",
+    pageCount: 488,
+    coverImage: "https://example.com/covers/dracula.jpg",
+    genres: ["Terror", "Gótico", "Clássico"],
+    description: "Um grupo luta contra o vampiro Drácula para impedir sua expansão pela Inglaterra.",
+    averageRating: 4.2,
+    ratingsCount: 1000000,
+    synopsis: "Diários e cartas constroem a tensão em torno do conde da Transilvânia.",
+    authorBio: "Bram Stoker (1847–1912) foi escritor irlandês, autor do romance gótico mais influente."
+  },
+  {
+    title: "O Iluminado",
+    subtitle: "O Hotel Overlook",
+    authors: ["Stephen King"],
+    publisher: "Suma",
+    publishedDate: new Date("1977-01-28"),
+    isbn: "9780000000014",
+    language: "pt-BR",
+    pageCount: 447,
+    coverImage: "https://example.com/covers/the-shining.jpg",
+    genres: ["Terror", "Suspense", "Sobrenatural"],
+    description: "Jack Torrance aceita ser zelador de inverno em um hotel isolado, onde forças sombrias o corrompem.",
+    averageRating: 4.5,
+    ratingsCount: 850000,
+    synopsis: "O dom do brilho em Danny e a espiral de loucura do pai.",
+    authorBio: "Stephen King (1947–) é um prolífico autor americano, conhecido como o mestre do terror."
+  },
+  {
+    title: "It: A Coisa",
+    subtitle: "O Medo Toma Forma",
+    authors: ["Stephen King"],
+    publisher: "Suma",
+    publishedDate: new Date("1986-09-15"),
+    isbn: "9780000000015",
+    language: "pt-BR",
+    pageCount: 1138,
+    coverImage: "https://example.com/covers/it.jpg",
+    genres: ["Terror", "Suspense"],
+    description: "Um grupo de amigos enfrenta uma entidade ancestral que desperta a cada 27 anos em Derry.",
+    averageRating: 4.4,
+    ratingsCount: 750000,
+    synopsis: "A amizade do Clube dos Otários contra o mal metamórfico.",
+    authorBio: "Stephen King (1947–) redefiniu o terror moderno com dezenas de best-sellers."
+  },
+  {
+    title: "O Grande Gatsby",
+    subtitle: "Sonhos e Decadência",
+    authors: ["F. Scott Fitzgerald"],
+    publisher: "Companhia das Letras",
+    publishedDate: new Date("1925-04-10"),
+    isbn: "9780000000016",
+    language: "pt-BR",
+    pageCount: 180,
+    coverImage: "https://example.com/covers/gatsby.jpg",
+    genres: ["Romance", "Clássico"],
+    description: "Na Era do Jazz, Jay Gatsby persegue um sonho romântico em meio à riqueza e ao vazio moral.",
+    averageRating: 4.0,
+    ratingsCount: 2200000,
+    synopsis: "O olhar de Nick Carraway sobre a elite e a ilusão americana.",
+    authorBio: "F. Scott Fitzgerald (1896–1940) retratou a década de 1920 com elegância e crítica social."
+  },
+  {
+    title: "Orgulho e Preconceito",
+    subtitle: "Amor e Ironia na Inglaterra Georgiana",
+    authors: ["Jane Austen"],
+    publisher: "Penguin",
+    publishedDate: new Date("1813-01-28"),
+    isbn: "9780000000017",
+    language: "pt-BR",
+    pageCount: 279,
+    coverImage: "https://example.com/covers/pride-prejudice.jpg",
+    genres: ["Romance", "Clássico"],
+    description: "Elizabeth Bennet confronta convenções sociais e seus próprios julgamentos ao conhecer o senhor Darcy.",
+    averageRating: 4.5,
+    ratingsCount: 3000000,
+    synopsis: "Bailes, propostas inesperadas e uma jornada de autoconhecimento.",
+    authorBio: "Jane Austen (1775–1817) é referência do romance inglês, com sátiras finas à sociedade."
+  },
+  {
+    title: "Jane Eyre",
+    subtitle: "Uma História de Resiliência",
+    authors: ["Charlotte Brontë"],
+    publisher: "Penguin",
+    publishedDate: new Date("1847-10-16"),
+    isbn: "9780000000018",
+    language: "pt-BR",
+    pageCount: 532,
+    coverImage: "https://example.com/covers/jane-eyre.jpg",
+    genres: ["Romance", "Clássico", "Gótico"],
+    description: "A órfã Jane busca independência e amor enquanto enfrenta segredos na mansão Thornfield.",
+    averageRating: 4.4,
+    ratingsCount: 1300000,
+    synopsis: "A governanta, o senhor Rochester e o quarto proibido.",
+    authorBio: "Charlotte Brontë (1816–1855) explorou temas de autonomia feminina e moralidade vitoriana."
+  },
+  {
+    title: "O Morro dos Ventos Uivantes",
+    subtitle: "Paixão e Vingança",
+    authors: ["Emily Brontë"],
+    publisher: "Penguin",
+    publishedDate: new Date("1847-12-01"),
+    isbn: "9780000000019",
+    language: "pt-BR",
+    pageCount: 416,
+    coverImage: "https://example.com/covers/wuthering-heights.jpg",
+    genres: ["Romance", "Drama", "Clássico"],
+    description: "A relação tempestuosa entre Heathcliff e Catherine molda gerações em uma fazenda isolada.",
+    averageRating: 4.1,
+    ratingsCount: 1100000,
+    synopsis: "Amor obsessivo, rivalidades e um cenário selvagem como personagem.",
+    authorBio: "Emily Brontë (1818–1848) escreveu um dos romances mais intensos da literatura inglesa."
+  },
+  {
+    title: "Crime e Castigo",
+    subtitle: "Culpa, Castigo e Redenção",
+    authors: ["Fiódor Dostoiévski"],
+    publisher: "Penguin",
+    publishedDate: new Date("1866-01-01"),
+    isbn: "9780000000020",
+    language: "pt-BR",
+    pageCount: 671,
+    coverImage: "https://example.com/covers/crime-e-castigo.jpg",
+    genres: ["Romance", "Psicológico", "Clássico"],
+    description: "Raskólnikov comete um crime e trava uma batalha moral e psicológica em busca de expiação.",
+    averageRating: 4.6,
+    ratingsCount: 900000,
+    synopsis: "O encontro com Sônia e a investigação implacável de Porfíri.",
+    authorBio: "Fiódor Dostoiévski (1821–1881) explorou a condição humana em obras de profundidade filosófica."
+  },
+  {
+    title: "O Conde de Monte Cristo",
+    subtitle: "Vingança e Justiça",
+    authors: ["Alexandre Dumas"],
+    publisher: "Penguin",
+    publishedDate: new Date("1844-08-28"),
+    isbn: "9780000000021",
+    language: "pt-BR",
+    pageCount: 1276,
+    coverImage: "https://example.com/covers/monte-cristo.jpg",
+    genres: ["Aventura", "Clássico"],
+    description: "Traído e preso, Edmond Dantès retorna como Conde de Monte Cristo para executar um plano de vingança.",
+    averageRating: 4.7,
+    ratingsCount: 800000,
+    synopsis: "Prisão no Château d'If, fortuna e identidades secretas.",
+    authorBio: "Alexandre Dumas (1802–1870) escreveu romances de capa e espada que marcaram gerações."
+  },
+  {
+    title: "Os Três Mosqueteiros",
+    subtitle: "Um por Todos, Todos por Um",
+    authors: ["Alexandre Dumas"],
+    publisher: "Penguin",
+    publishedDate: new Date("1844-03-14"),
+    isbn: "9780000000022",
+    language: "pt-BR",
+    pageCount: 704,
+    coverImage: "https://example.com/covers/tres-mosqueteiros.jpg",
+    genres: ["Aventura", "Histórico", "Clássico"],
+    description: "D'Artagnan alia-se a Athos, Porthos e Aramis em intrigas na corte francesa.",
+    averageRating: 4.4,
+    ratingsCount: 700000,
+    synopsis: "Conspirações do Cardeal Richelieu e duelos de honra.",
+    authorBio: "Alexandre Dumas (1802–1870) tornou-se sinônimo de aventura histórica na literatura."
+  },
+  {
+    title: "Moby Dick",
+    subtitle: "A Baleia Branca",
+    authors: ["Herman Melville"],
+    publisher: "Penguin",
+    publishedDate: new Date("1851-10-18"),
+    isbn: "9780000000023",
+    language: "pt-BR",
+    pageCount: 635,
+    coverImage: "https://example.com/covers/moby-dick.jpg",
+    genres: ["Aventura", "Marítimo", "Clássico"],
+    description: "O capitão Ahab persegue obsessivamente a baleia Moby Dick, numa alegoria do destino humano.",
+    averageRating: 4.0,
+    ratingsCount: 650000,
+    synopsis: "O olhar de Ishmael sobre a caça às baleias e a loucura de Ahab.",
+    authorBio: "Herman Melville (1819–1891) escreveu romances que ganharam reconhecimento póstumo."
+  },
+  {
+    title: "Cem Anos de Solidão",
+    subtitle: "A Saga dos Buendía",
+    authors: ["Gabriel García Márquez"],
+    publisher: "Record",
+    publishedDate: new Date("1967-05-30"),
+    isbn: "9780000000024",
+    language: "pt-BR",
+    pageCount: 417,
+    coverImage: "https://example.com/covers/100-anos.jpg",
+    genres: ["Realismo Mágico", "Romance"],
+    description: "A história multigeracional da família Buendía na cidade fictícia de Macondo.",
+    averageRating: 4.6,
+    ratingsCount: 1200000,
+    synopsis: "Amores, guerras e milagres em um universo próprio.",
+    authorBio: "García Márquez (1927–2014) foi Nobel de Literatura e referência do realismo mágico."
+  },
+  {
+    title: "Dom Casmurro",
+    subtitle: "Memórias e Ciúme",
+    authors: ["Machado de Assis"],
+    publisher: "Editora 34",
+    publishedDate: new Date("1899-01-01"),
+    isbn: "9780000000025",
+    language: "pt-BR",
+    pageCount: 256,
+    coverImage: "https://example.com/covers/dom-casmurro.jpg",
+    genres: ["Literatura Brasileira", "Romance", "Clássico"],
+    description: "Bentinho narra sua vida e suas desconfianças sobre o amor por Capitu.",
+    averageRating: 4.5,
+    ratingsCount: 500000,
+    synopsis: "Olhos de ressaca e narrador pouco confiável.",
+    authorBio: "Machado de Assis (1839–1908) é um dos maiores escritores da língua portuguesa."
+  },
+  {
+    title: "Grande Sertão: Veredas",
+    subtitle: "Travessias e Diadorim",
+    authors: ["João Guimarães Rosa"],
+    publisher: "Nova Fronteira",
+    publishedDate: new Date("1956-01-01"),
+    isbn: "9780000000026",
+    language: "pt-BR",
+    pageCount: 608,
+    coverImage: "https://example.com/covers/grande-sertao.jpg",
+    genres: ["Literatura Brasileira", "Épico"],
+    description: "Riobaldo narra sua vida de jagunço no sertão, entre guerras, amores e pactos.",
+    averageRating: 4.6,
+    ratingsCount: 300000,
+    synopsis: "A linguagem inventiva e o enigma de Diadorim.",
+    authorBio: "Guimarães Rosa (1908–1967) renovou a prosa brasileira com experimentalismo linguístico."
+  },
+  {
+    title: "O Apanhador no Campo de Centeio",
+    subtitle: "A Adolescência em Crise",
+    authors: ["J.D. Salinger"],
+    publisher: "Little, Brown and Company",
+    publishedDate: new Date("1951-07-16"),
+    isbn: "9780000000027",
+    language: "pt-BR",
+    pageCount: 277,
+    coverImage: "https://example.com/covers/catcher-rye.jpg",
+    genres: ["Romance", "Clássico", "Juvenil"],
+    description: "Holden Caulfield percorre Nova York questionando a hipocrisia do mundo adulto.",
+    averageRating: 3.9,
+    ratingsCount: 2300000,
+    synopsis: "Uma voz cínica e sensível em busca de sentido.",
+    authorBio: "J.D. Salinger (1919–2010) ficou famoso e recluso após o sucesso de seu romance."
+  },
+  {
+    title: "A Metamorfose",
+    subtitle: "Quando Gregor Acorda",
+    authors: ["Franz Kafka"],
+    publisher: "Companhia das Letras",
+    publishedDate: new Date("1915-01-01"),
+    isbn: "9780000000028",
+    language: "pt-BR",
+    pageCount: 201,
+    coverImage: "https://example.com/covers/metamorfose.jpg",
+    genres: ["Ficção Filosófica", "Clássico"],
+    description: "Gregor Samsa acorda transformado em inseto, revelando o absurdo e a alienação familiar.",
+    averageRating: 4.1,
+    ratingsCount: 900000,
+    synopsis: "A desumanização cotidiana em uma parábola inquietante.",
+    authorBio: "Franz Kafka (1883–1924) criou obras que inspiraram o termo ‘kafkiano’."
+  },
+  {
+    title: "O Processo",
+    subtitle: "Culpado sem Crime",
+    authors: ["Franz Kafka"],
+    publisher: "Companhia das Letras",
+    publishedDate: new Date("1925-01-01"),
+    isbn: "9780000000029",
+    language: "pt-BR",
+    pageCount: 304,
+    coverImage: "https://example.com/covers/o-processo.jpg",
+    genres: ["Ficção Filosófica", "Clássico"],
+    description: "Josef K. é processado por uma autoridade invisível, em um labirinto burocrático opressor.",
+    averageRating: 4.0,
+    ratingsCount: 600000,
+    synopsis: "Culpa difusa, instituições absurdas e impotência do indivíduo.",
+    authorBio: "Franz Kafka (1883–1924) é um dos autores mais influentes do século XX."
+  },
+  {
+    title: "O Retrato de Dorian Gray",
+    subtitle: "Beleza e Corrupção",
+    authors: ["Oscar Wilde"],
+    publisher: "Penguin",
+    publishedDate: new Date("1890-06-20"),
+    isbn: "9780000000030",
+    language: "pt-BR",
+    pageCount: 254,
+    coverImage: "https://example.com/covers/dorian-gray.jpg",
+    genres: ["Clássico", "Filosófico", "Suspense"],
+    description: "Dorian permanece jovem enquanto seu retrato absorve os sinais de seu hedonismo.",
+    averageRating: 4.3,
+    ratingsCount: 950000,
+    synopsis: "A influência de Lord Henry e o preço da vaidade.",
+    authorBio: "Oscar Wilde (1854–1900) foi dramaturgo e romancista irlandês, ícone do esteticismo."
+  },
+  {
+    title: "O Senhor dos Anéis: As Duas Torres",
+    subtitle: "A Saga do Anel – Volume 2",
+    authors: ["J.R.R. Tolkien"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1954-11-11"),
+    isbn: "9780000000031",
+    language: "pt-BR",
+    pageCount: 352,
+    coverImage: "https://example.com/covers/lotr-two-towers.jpg",
+    genres: ["Fantasia", "Aventura", "Épico"],
+    description: "A Sociedade se divide; Frodo e Sam seguem para Mordor enquanto Rohan enfrenta Saruman.",
+    averageRating: 4.9,
+    ratingsCount: 1400000,
+    synopsis: "Ents em Isengard e a queda do Abismo de Helm.",
+    authorBio: "Tolkien consolidou um universo linguístico e mitológico sem precedentes."
+  },
+  {
+    title: "O Senhor dos Anéis: O Retorno do Rei",
+    subtitle: "A Saga do Anel – Volume 3",
+    authors: ["J.R.R. Tolkien"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1955-10-20"),
+    isbn: "9780000000032",
+    language: "pt-BR",
+    pageCount: 416,
+    coverImage: "https://example.com/covers/lotr-return-king.jpg",
+    genres: ["Fantasia", "Aventura", "Épico"],
+    description: "O cerco a Gondor e a jornada final ao coração das trevas decidem o destino do Anel.",
+    averageRating: 4.9,
+    ratingsCount: 1350000,
+    synopsis: "A coragem de Sam e a coroação de Aragorn.",
+    authorBio: "Tolkien encerrou a trilogia com uma reflexão sobre poder e sacrifício."
+  },
+  {
+    title: "Fundação e Império",
+    subtitle: "A Trilogia Fundação – Livro 2",
+    authors: ["Isaac Asimov"],
+    publisher: "Editora Aleph",
+    publishedDate: new Date("1952-01-01"),
+    isbn: "9780000000033",
+    language: "pt-BR",
+    pageCount: 288,
+    coverImage: "https://example.com/covers/foundation-empire.jpg",
+    genres: ["Ficção Científica", "Space Opera"],
+    description: "A Fundação enfrenta o poder remanescente do Império e o imprevisível Mulo.",
+    averageRating: 4.2,
+    ratingsCount: 420000,
+    synopsis: "Quando a psico-história falha diante do fator humano.",
+    authorBio: "Asimov foi também divulgador científico e professor de bioquímica."
+  },
+  {
+    title: "Duna: O Messias de Duna",
+    subtitle: "Crônicas de Duna – Livro 2",
+    authors: ["Frank Herbert"],
+    publisher: "Editora Aleph",
+    publishedDate: new Date("1969-10-15"),
+    isbn: "9780000000034",
+    language: "pt-BR",
+    pageCount: 336,
+    coverImage: "https://example.com/covers/dune-messiah.jpg",
+    genres: ["Ficção Científica", "Política"],
+    description: "Paul Atreides lida com as consequências de seu império e o peso do destino presciente.",
+    averageRating: 4.1,
+    ratingsCount: 300000,
+    synopsis: "Conspirações, fanatismo e o custo do poder messiânico.",
+    authorBio: "Herbert expandiu o universo de Duna em seis romances."
+  },
+  {
+    title: "Harry Potter e a Câmara Secreta",
+    subtitle: "Harry Potter – Ano 2",
+    authors: ["J.K. Rowling"],
+    publisher: "Rocco",
+    publishedDate: new Date("1998-07-02"),
+    isbn: "9780000000035",
+    language: "pt-BR",
+    pageCount: 251,
+    coverImage: "https://example.com/covers/hp2.jpg",
+    genres: ["Fantasia", "Juvenil"],
+    description: "Mensagens ameaçadoras e petrificações levam Harry a descobrir o segredo da Câmara Secreta.",
+    averageRating: 4.5,
+    ratingsCount: 2200000,
+    synopsis: "Herança de Slytherin e o diário de Tom Riddle.",
+    authorBio: "Rowling expandiu o universo bruxo em sete livros principais."
+  },
+  {
+    title: "As Crônicas de Nárnia: Príncipe Caspian",
+    subtitle: "As Crônicas de Nárnia – Livro 4",
+    authors: ["C.S. Lewis"],
+    publisher: "HarperCollins",
+    publishedDate: new Date("1951-10-15"),
+    isbn: "9780000000036",
+    language: "pt-BR",
+    pageCount: 240,
+    coverImage: "https://example.com/covers/narnia-prince-caspian.jpg",
+    genres: ["Fantasia", "Infantojuvenil"],
+    description: "Os irmãos Pevensie retornam a Nárnia para restaurar o trono ao jovem Caspian.",
+    averageRating: 4.3,
+    ratingsCount: 600000,
+    synopsis: "Nárnia séculos depois e a resistência contra Miraz.",
+    authorBio: "Lewis combinou alegoria e aventura em sua série infantil mais famosa."
+  },
+  {
+    title: "Anne de Green Gables",
+    subtitle: "A Menina dos Cabelos Ruivos",
+    authors: ["L.M. Montgomery"],
+    publisher: "Editora Biruta",
+    publishedDate: new Date("1908-06-01"),
+    isbn: "9780000000037",
+    language: "pt-BR",
+    pageCount: 320,
+    coverImage: "https://example.com/covers/anne-green-gables.jpg",
+    genres: ["Clássico", "Infantojuvenil"],
+    description: "Anne Shirley, órfã imaginativa, transforma a vida em Green Gables com sua alegria e ousadia.",
+    averageRating: 4.4,
+    ratingsCount: 800000,
+    synopsis: "Pertencimento, amizade e o poder da imaginação.",
+    authorBio: "Lucy Maud Montgomery (1874–1942) é celebrada por retratar a infância com ternura e humor."
+  },
+  {
+    title: "O Jardim Secreto",
+    subtitle: "Portas para a Cura",
+    authors: ["Frances Hodgson Burnett"],
+    publisher: "Penguin",
+    publishedDate: new Date("1911-01-01"),
+    isbn: "9780000000038",
+    language: "pt-BR",
+    pageCount: 288,
+    coverImage: "https://example.com/covers/secret-garden.jpg",
+    genres: ["Clássico", "Infantojuvenil"],
+    description: "Mary Lennox descobre um jardim abandonado que renova vidas e relações.",
+    averageRating: 4.3,
+    ratingsCount: 700000,
+    synopsis: "Amizade, natureza e transformação interior.",
+    authorBio: "Frances Hodgson Burnett (1849–1924) escreveu clássicos infantis duradouros."
+  },
+  {
+    title: "A Cor Púrpura",
+    subtitle: "Vozes de Resistência",
+    authors: ["Alice Walker"],
+    publisher: "José Olympio",
+    publishedDate: new Date("1982-01-01"),
+    isbn: "9780000000039",
+    language: "pt-BR",
+    pageCount: 295,
+    coverImage: "https://example.com/covers/purple.jpg",
+    genres: ["Romance", "Drama"],
+    description: "Cartas de Celie narram dor e emancipação no sul dos EUA do século XX.",
+    averageRating: 4.5,
+    ratingsCount: 900000,
+    synopsis: "Laços femininos e reconstrução da dignidade.",
+    authorBio: "Alice Walker (1944–) é romancista e ativista, vencedora do Prêmio Pulitzer."
+  },
+  {
+    title: "O Sol é para Todos",
+    subtitle: "Inocência e Justiça",
+    authors: ["Harper Lee"],
+    publisher: "José Olympio",
+    publishedDate: new Date("1960-07-11"),
+    isbn: "9780000000040",
+    language: "pt-BR",
+    pageCount: 336,
+    coverImage: "https://example.com/covers/mockingbird.jpg",
+    genres: ["Romance", "Clássico", "Drama"],
+    description: "Pelo olhar de Scout, a luta de Atticus Finch contra o preconceito racial em um caso judicial.",
+    averageRating: 4.6,
+    ratingsCount: 4000000,
+    synopsis: "Infância, coragem moral e crítica social no sul dos EUA.",
+    authorBio: "Harper Lee (1926–2016) escreveu um dos romances mais lidos do século XX."
+  }
+];
+
 async function main() {
-  console.log("Iniciando o seed...");
-
-  // Código opcional para limpar o banco de dados antes de inserir novos dados
-  await prisma.card.deleteMany({});
-  await prisma.collection.deleteMany({});
-
-  // Criar coleções de diferentes temáticas
-  const nbaLegends = await prisma.collection.create({
-    data: {
-      name: "NBA Legends",
-      description: "Jogadores lendários da história do basquete da NBA",
-      releaseYear: 2023,
-    },
-  });
-
-  const rockBands = await prisma.collection.create({
-    data: {
-      name: "Classic Rock",
-      description: "Bandas clássicas do rock mundial",
-      releaseYear: 2022,
-    },
-  });
-
-  const worldMonuments = await prisma.collection.create({
-    data: {
-      name: "World Monuments",
-      description: "Monumentos históricos famosos ao redor do mundo",
-      releaseYear: 2021,
-    },
-  });
-
-  const dinosaurs = await prisma.collection.create({
-    data: {
-      name: "Prehistoric Giants",
-      description: "Dinossauros que habitaram a Terra há milhões de anos",
-      releaseYear: 2023,
-    },
-  });
-
-  const videogameConsoles = await prisma.collection.create({
-    data: {
-      name: "Gaming History",
-      description: "Consoles de videogame que marcaram gerações",
-      releaseYear: 2022,
-    },
-  });
-
-  console.log("Coleções criadas. Inserindo cards...");
-
-  // Cards para NBA Legends
-  const nbaCards = await Promise.all([
-    prisma.card.create({
-      data: {
-        name: "Michael Jordan",
-        rarity: "Ultra Rare",
-        attackPoints: 9800,
-        defensePoints: 9200,
-        imageUrl: "https://example.com/jordan.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "LeBron James",
-        rarity: "Ultra Rare",
-        attackPoints: 9700,
-        defensePoints: 9500,
-        imageUrl: "https://example.com/lebron.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Kobe Bryant",
-        rarity: "Ultra Rare",
-        attackPoints: 9600,
-        defensePoints: 9300,
-        imageUrl: "https://example.com/kobe.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Magic Johnson",
-        rarity: "Super Rare",
-        attackPoints: 9400,
-        defensePoints: 8700,
-        imageUrl: "https://example.com/magic.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Larry Bird",
-        rarity: "Super Rare",
-        attackPoints: 9300,
-        defensePoints: 8800,
-        imageUrl: "https://example.com/bird.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Shaquille O'Neal",
-        rarity: "Super Rare",
-        attackPoints: 9500,
-        defensePoints: 9400,
-        imageUrl: "https://example.com/shaq.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Stephen Curry",
-        rarity: "Rare",
-        attackPoints: 9200,
-        defensePoints: 8500,
-        imageUrl: "https://example.com/curry.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Kevin Durant",
-        rarity: "Rare",
-        attackPoints: 9300,
-        defensePoints: 8600,
-        imageUrl: "https://example.com/durant.jpg",
-        collectionId: nbaLegends.id,
-      },
-    }),
-  ]);
-
-  // Cards para Classic Rock
-  const rockCards = await Promise.all([
-    prisma.card.create({
-      data: {
-        name: "Queen",
-        rarity: "Ultra Rare",
-        attackPoints: 9600,
-        defensePoints: 9200,
-        imageUrl: "https://example.com/queen.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Led Zeppelin",
-        rarity: "Ultra Rare",
-        attackPoints: 9700,
-        defensePoints: 9100,
-        imageUrl: "https://example.com/ledzeppelin.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Pink Floyd",
-        rarity: "Ultra Rare",
-        attackPoints: 9500,
-        defensePoints: 9300,
-        imageUrl: "https://example.com/pinkfloyd.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "The Beatles",
-        rarity: "Ultra Rare",
-        attackPoints: 9800,
-        defensePoints: 9400,
-        imageUrl: "https://example.com/beatles.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "AC/DC",
-        rarity: "Super Rare",
-        attackPoints: 9300,
-        defensePoints: 8800,
-        imageUrl: "https://example.com/acdc.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "The Rolling Stones",
-        rarity: "Super Rare",
-        attackPoints: 9400,
-        defensePoints: 9000,
-        imageUrl: "https://example.com/rollingstones.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Guns N' Roses",
-        rarity: "Rare",
-        attackPoints: 9100,
-        defensePoints: 8700,
-        imageUrl: "https://example.com/gunsnroses.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Metallica",
-        rarity: "Rare",
-        attackPoints: 9200,
-        defensePoints: 8900,
-        imageUrl: "https://example.com/metallica.jpg",
-        collectionId: rockBands.id,
-      },
-    }),
-  ]);
-
-  // Cards para World Monuments
-  const monumentCards = await Promise.all([
-    prisma.card.create({
-      data: {
-        name: "Eiffel Tower",
-        rarity: "Ultra Rare",
-        attackPoints: 8800,
-        defensePoints: 9500,
-        imageUrl: "https://example.com/eiffel.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Great Wall of China",
-        rarity: "Ultra Rare",
-        attackPoints: 8500,
-        defensePoints: 9800,
-        imageUrl: "https://example.com/greatwall.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Taj Mahal",
-        rarity: "Ultra Rare",
-        attackPoints: 8700,
-        defensePoints: 9600,
-        imageUrl: "https://example.com/tajmahal.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Pyramids of Giza",
-        rarity: "Ultra Rare",
-        attackPoints: 8600,
-        defensePoints: 9900,
-        imageUrl: "https://example.com/pyramids.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Colosseum",
-        rarity: "Super Rare",
-        attackPoints: 8400,
-        defensePoints: 9300,
-        imageUrl: "https://example.com/colosseum.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Statue of Liberty",
-        rarity: "Super Rare",
-        attackPoints: 8300,
-        defensePoints: 9200,
-        imageUrl: "https://example.com/liberty.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Stonehenge",
-        rarity: "Rare",
-        attackPoints: 8000,
-        defensePoints: 9400,
-        imageUrl: "https://example.com/stonehenge.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Machu Picchu",
-        rarity: "Rare",
-        attackPoints: 8200,
-        defensePoints: 9100,
-        imageUrl: "https://example.com/machupicchu.jpg",
-        collectionId: worldMonuments.id,
-      },
-    }),
-  ]);
-
-  // Cards para Prehistoric Giants
-  const dinosaurCards = await Promise.all([
-    prisma.card.create({
-      data: {
-        name: "Tyrannosaurus Rex",
-        rarity: "Ultra Rare",
-        attackPoints: 9900,
-        defensePoints: 8800,
-        imageUrl: "https://example.com/trex.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Velociraptor",
-        rarity: "Super Rare",
-        attackPoints: 9400,
-        defensePoints: 8300,
-        imageUrl: "https://example.com/velociraptor.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Brachiosaurus",
-        rarity: "Super Rare",
-        attackPoints: 8500,
-        defensePoints: 9700,
-        imageUrl: "https://example.com/brachiosaurus.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Triceratops",
-        rarity: "Super Rare",
-        attackPoints: 8700,
-        defensePoints: 9600,
-        imageUrl: "https://example.com/triceratops.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Stegosaurus",
-        rarity: "Rare",
-        attackPoints: 8400,
-        defensePoints: 9500,
-        imageUrl: "https://example.com/stegosaurus.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Spinosaurus",
-        rarity: "Ultra Rare",
-        attackPoints: 9800,
-        defensePoints: 8700,
-        imageUrl: "https://example.com/spinosaurus.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Ankylosaurus",
-        rarity: "Rare",
-        attackPoints: 8200,
-        defensePoints: 9800,
-        imageUrl: "https://example.com/ankylosaurus.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Pteranodon",
-        rarity: "Rare",
-        attackPoints: 9100,
-        defensePoints: 8000,
-        imageUrl: "https://example.com/pteranodon.jpg",
-        collectionId: dinosaurs.id,
-      },
-    }),
-  ]);
-
-  // Cards para Gaming History
-  const consoleCards = await Promise.all([
-    prisma.card.create({
-      data: {
-        name: "Atari 2600",
-        rarity: "Ultra Rare",
-        attackPoints: 7500,
-        defensePoints: 8000,
-        imageUrl: "https://example.com/atari.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Nintendo NES",
-        rarity: "Ultra Rare",
-        attackPoints: 8200,
-        defensePoints: 8300,
-        imageUrl: "https://example.com/nes.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Sega Genesis",
-        rarity: "Super Rare",
-        attackPoints: 8100,
-        defensePoints: 8200,
-        imageUrl: "https://example.com/genesis.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Super Nintendo",
-        rarity: "Super Rare",
-        attackPoints: 8300,
-        defensePoints: 8400,
-        imageUrl: "https://example.com/snes.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "PlayStation 1",
-        rarity: "Rare",
-        attackPoints: 8400,
-        defensePoints: 8500,
-        imageUrl: "https://example.com/ps1.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Nintendo 64",
-        rarity: "Rare",
-        attackPoints: 8400,
-        defensePoints: 8300,
-        imageUrl: "https://example.com/n64.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "Xbox",
-        rarity: "Common",
-        attackPoints: 8600,
-        defensePoints: 8700,
-        imageUrl: "https://example.com/xbox.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-    prisma.card.create({
-      data: {
-        name: "PlayStation 2",
-        rarity: "Common",
-        attackPoints: 8700,
-        defensePoints: 8800,
-        imageUrl: "https://example.com/ps2.jpg",
-        collectionId: videogameConsoles.id,
-      },
-    }),
-  ]);
-
-  console.log(
-    `Seed concluído! Criadas ${await prisma.collection.count()} coleções e ${await prisma.card.count()} cards.`
-  );
+  await prisma.book.createMany({ data: books });
+  console.log("✅ Seed inserido com sucesso: ", books.length, "livros.");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Erro ao executar seed:", e);
     process.exit(1);
   })
   .finally(async () => {

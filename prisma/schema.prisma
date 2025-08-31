@@ -17,17 +17,19 @@ model Book {
   id            Int      @id @default(autoincrement())
   title         String
   subtitle      String?
-  author        String
+  authors       Json
   publisher     String?
   publishedDate DateTime?
   isbn          String   @unique
   language      String?
   pageCount     Int?
   coverImage    String
-  genres        String
+  genres        Json?
   description   String
-  averageRating Float
+  averageRating Float?
   ratingsCount  Int?
+  synopsis      String?
+  authorBio     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

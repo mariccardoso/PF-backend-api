@@ -1,167 +1,193 @@
 import prisma from "../../prisma/prisma.js";
 
-class CardModel {
-  // Obter todas as cartas
-  async findAll(raridade, ataque, pagina, limite, name) {
-    if (Number(pagina) < 1) {
-      pagina = 1;
-    }
+class BookModel {
+  // Obter todos os livros
+  async findAll(filters, pagination) {
+    let { page, limit } = pagination; // corrigido para let
 
-    if (Number(limite) < 1 || Number(limite) > 100) {
-      limite = 10;
-    }
+    const {
+      title,
+      author,
+      publisher,
+      publishedDate,
+      isbn,
+      language,
+      pageCount,
+      coverImage,
+      genres,
+      description,
+      averageRating,
+      ratingsCount,
+    } = filters;
 
-    const skip = (Number(pagina) - 1) * Number(limite);
-    //                4 - 1 = 3 * 10 = 30
+    // Normalização de paginação
+    page = Number(page) < 1 || isNaN(Number(page)) ? 1 : Number(page);
+    limit = Number(limit) < 1 || Number(limit) > 100 || isNaN(Number(limit)) ? 10 : Number(limit);
+
+    const skip = (page - 1) * limit;
 
     const where = {};
 
-    if (raridade) {
-      where.rarity = raridade;
+    if (title) {
+      where.title = { contains: title };
     }
 
-    if (ataque) {
-      where.attackPoints = {
-        gte: Number(ataque),
-      };
+    if (author) {
+      where.author = { contains: author };
     }
 
-    if (name) {
-      where.name = {
-        contains: name,
-      };
+    if (publisher) {
+      where.publisher = { contains: publisher };
     }
 
-    const cartas = await prisma.card.findMany({
-      /* where: {
-        rarity: "Ultra Rare",
-      }, */
-      /* where: {
-        attackPoints: {
-          lte: 8000, // Menor ou igual a 8000
-        },
-      }, */
+    if (publishedDate) {
+      where.publishedDate = { equals: new Date(publishedDate) };
+    }
 
-      /* where: {
-        attackPoints: {
-          gte: Number(ataque),
-        },
-        rarity: raridade,
-      }, */
+    if (isbn) {
+      where.isbn = { equals: isbn };
+    }
+
+    if (language) {
+      where.language = { contains: language };
+    }
+
+    if (averageRating) {
+      where.averageRating = { gte: Number(averageRating) };
+    }
+
+    if (ratingsCount) {
+      where.ratingsCount = { gte: Number(ratingsCount) };
+    }
+
+    if (genres) {
+      // Agora genres é String[]
+      where.genres = { hasSome: Array.isArray(genres) ? genres : [genres] };
+    }
+
+    const books = await prisma.book.findMany({
       skip,
-      take: Number(limite),
+      take: limit,
       where,
       orderBy: {
         createdAt: "desc",
       },
-      include: {
-        collection: {
-          select: {
-            name: true,
-            description: true,
-            releaseYear: true,
-          },
-        },
-      },
     });
 
-    const totalExibidos = cartas.length;
-    const totalGeral = await prisma.card.count({
-      where,
-    });
+    const totalExibidos = books.length;
+    const totalGeral = await prisma.book.count({ where });
 
-    // console.log(cartas);
-
-    return { totalExibidos, totalGeral, cartas };
+    return { totalExibidos, totalGeral, books };
   }
 
-  // Obter uma carta pelo ID
+  // Obter um livro pelo ID
   async findById(id) {
-    const carta = await prisma.card.findUnique({
-      where: {
-        id: Number(id),
-      },
-      include: {
-        collection: true,
-      },
+    const book = await prisma.book.findUnique({
+      where: { id: Number(id) },
     });
-
-    return carta;
+    return book;
   }
 
-  // Criar uma nova carta
+  // Criar um novo livro
   async create(
-    name,
-    rarity,
-    attackPoints,
-    defensePoints,
-    imageUrl,
-    collectionId
+    title,
+    author,
+    publisher,
+    publishedDate,
+    isbn,
+    language,
+    pageCount,
+    coverImage,
+    genres,
+    synopsis,
+    authorBio,
+    description,
+    averageRating,
+    ratingsCount
   ) {
-    const novaCarta = await prisma.card.create({
+    const newBook = await prisma.book.create({
       data: {
-        name,
-        rarity,
-        attackPoints,
-        defensePoints,
-        imageUrl,
-        collectionId: Number(collectionId),
+        title,
+        author,
+        publisher,
+        publishedDate,
+        isbn,
+        language,
+        pageCount,
+        synopsis,
+        authorBio,
+        coverImage,
+        genres: Array.isArray(genres) ? genres : genres ? [genres] : [],
+        description,
+        averageRating,
+        ratingsCount,
       },
     });
 
-    return novaCarta;
+    return newBook;
   }
 
-  // Atualizar uma carta
+  // Atualizar um livro
   async update(
     id,
-    name,
-    rarity,
-    attackPoints,
-    defensePoints,
-    imageUrl,
-    collectionId
-  ) {
-    const carta = await this.findById(id);
+    title,
+    author,
+    publisher,
+    publishedDate,
+    isbn,
+    language,
+    pageCount,
+    coverImage,
+    genres,
+    synopsis,
 
-    if (!carta) {
+    description,
+    averageRating,
+    ratingsCount
+  ) {
+    const book = await this.findById(id);
+
+    if (!book) {
       return null;
     }
 
-    // Atualize a carta existente com os novos dados
-    const cartaAtualizada = await prisma.card.update({
-      where: {
-        id: Number(id),
-      },
+    const updatedBook = await prisma.book.update({
+      where: { id: Number(id) },
       data: {
-        name,
-        rarity,
-        attackPoints,
-        defensePoints,
-        imageUrl,
-        collectionId: Number(collectionId),
+        title,
+        author,
+        publisher,
+        publishedDate,
+        isbn,
+        synopsis,
+        authorBio,
+        language,
+        pageCount,
+        coverImage,
+        genres: Array.isArray(genres) ? genres : genres ? [genres] : [],
+        description,
+        averageRating,
+        ratingsCount,
       },
     });
 
-    return cartaAtualizada;
+    return updatedBook;
   }
 
-  // Remover uma carta
+  // Remover um livro
   async delete(id) {
-    const carta = await this.findById(id);
+    const book = await this.findById(id);
 
-    if (!carta) {
+    if (!book) {
       return null;
     }
 
-    await prisma.card.delete({
-      where: {
-        id: Number(id),
-      },
+    await prisma.book.delete({
+      where: { id: Number(id) },
     });
 
     return true;
   }
 }
 
-export default new CardModel();
+export default new BookModel();
