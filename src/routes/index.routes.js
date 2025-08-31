@@ -5,7 +5,7 @@ import authRouter from "./auth.routes.js";
 import animesRouter from "./animeRoutes.js";
 import personagensRouter from "./personagemRoutes.js";
 import collectionRouter from "./collectionRoutes.js";
-import cardRouter from "./cardRoutes.js";
+import cardRouter from "./card.routes.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 
