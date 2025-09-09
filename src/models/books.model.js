@@ -11,7 +11,7 @@ class BookModel {
     });
 
 
-    return { books };
+    return books;
   }
 
   // Obter um livro pelo ID
