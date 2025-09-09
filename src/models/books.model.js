@@ -2,82 +2,16 @@ import prisma from "../../prisma/prisma.js";
 
 class BookModel {
   // Obter todos os livros
-  async findAll(filters, pagination) {
-    let { page, limit } = pagination; // corrigido para let
-
-    const {
-      title,
-      author,
-      publisher,
-      publishedDate,
-      isbn,
-      language,
-      pageCount,
-      coverImage,
-      genres,
-      description,
-      averageRating,
-      ratingsCount,
-    } = filters;
-
-    // Normalização de paginação
-    page = Number(page) < 1 || isNaN(Number(page)) ? 1 : Number(page);
-    limit = Number(limit) < 1 || Number(limit) > 100 || isNaN(Number(limit)) ? 10 : Number(limit);
-
-    const skip = (page - 1) * limit;
-
-    const where = {};
-
-    if (title) {
-      where.title = { contains: title };
-    }
-
-    if (author) {
-      where.author = { contains: author };
-    }
-
-    if (publisher) {
-      where.publisher = { contains: publisher };
-    }
-
-    if (publishedDate) {
-      where.publishedDate = { equals: new Date(publishedDate) };
-    }
-
-    if (isbn) {
-      where.isbn = { equals: isbn };
-    }
-
-    if (language) {
-      where.language = { contains: language };
-    }
-
-    if (averageRating) {
-      where.averageRating = { gte: Number(averageRating) };
-    }
-
-    if (ratingsCount) {
-      where.ratingsCount = { gte: Number(ratingsCount) };
-    }
-
-    if (genres) {
-      // Agora genres é String[]
-      where.genres = { hasSome: Array.isArray(genres) ? genres : [genres] };
-    }
+  async findAll() {
 
     const books = await prisma.book.findMany({
-      skip,
-      take: limit,
-      where,
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    const totalExibidos = books.length;
-    const totalGeral = await prisma.book.count({ where });
 
-    return { totalExibidos, totalGeral, books };
+    return { books };
   }
 
   // Obter um livro pelo ID
@@ -185,6 +119,20 @@ class BookModel {
     await prisma.book.delete({
       where: { id: Number(id) },
     });
+
+    return true;
+  }
+
+  // remover todos os livros
+
+  async deleteAll() {
+    const allBooks = await prisma.book.findMany();
+
+    if (allBooks.length === 0) {
+      return null;
+    }
+
+    await prisma.book.deleteMany();
 
     return true;
   }

@@ -19,4 +19,7 @@ bookRouter.put("/:id", BookController.updateBook);
 // DELETE /livros/:id - Remover um Livro
 bookRouter.delete("/:id", BookController.deleteBook);
 
+// DELETE /livros - Remover todos os  Livros
+bookRouter.delete("/", BookController.deleteAllBooks);
+
 export default bookRouter;

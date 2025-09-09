@@ -151,6 +151,23 @@ class BookController {
       res.status(500).json({ error: "Erro ao remover Livro!" });
     }
   }
+
+  //DELETE ALL BOOKS
+  async deleteAllBooks(req, res) {
+    try {
+      const result = await BookModel.deleteAll();
+
+      if (!result) {
+        return res.status(404).json({ error: "Nenhum livro encontrado!" });
+      }
+
+      res.status(200).json({ message: "Todos os livros foram removidos com sucesso" });
+    } catch (error) {
+      console.error("Erro ao remover todos os livros:", error);
+      res.status(500).json({ error: "Erro ao remover todos os livros!" });
+    }
+  }
+
 }
 
 export default new BookController();
